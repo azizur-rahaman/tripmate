@@ -1,3 +1,76 @@
 
-class CityModel {}
+import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tripmate/features/city_search/data/models/weather_model.dart';
+import 'package:tripmate/features/city_search/domain/entities/city.dart';
+
+part 'city_model.g.dart';
+
+@JsonSerializable()
+@Collection()
+class CityModel {
+  Id isarId = Isar.autoIncrement;
+
+  @JsonKey(name:'id')
+  final int cityId;
+
+  final String name;
+  final String country;
+  final String countryCode;
+  final int population;
+  final double latitude;
+  final double longitude;
+  final String? imageUrl;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final WeatherModel? weatherData;
+
+  @Index()
+  final DateTime searchedAt;
+
+  CityModel({
+    required this.cityId,
+    required this.name,
+    required this.country,
+    required this.countryCode,
+    required this.population,
+    required this.latitude,
+    required this.longitude,
+    this.imageUrl,
+    this.weatherData,
+    DateTime? searchedAt,
+  }) : searchedAt = searchedAt ?? DateTime.now();
+
+
+  factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
+  Map<String,dynamic> toJson() => _$CityModelToJson(this);
+
+  City toEntity() {
+    return City(id: cityId, name: name, country: country, countryCode: countryCode, population: population, latitude: latitude, longitude: longitude,
+    imageUrl: imageUrl,
+    weather: weatherData?.toEntity(),
+    );
+  }
+
+  factory CityModel.fromEntity(City city) {
+    return CityModel(cityId: city.id, name: city.name, country: city.country, countryCode: city.countryCode, population: city.population, latitude: city.latitude, longitude: city.longitude, 
+    imageUrl:  city.imageUrl,
+    weatherData: city.weather != null?
+                  WeatherModel.fromEntity(city.weather!)
+                  : null
+    );
+  }
+
+  CityModel copyWith({
+    String? imageUrl,
+    WeatherModel? weatherData
+  }){
+    return CityModel(cityId: cityId, name: name, country: country, countryCode: countryCode, population: population, latitude: latitude, longitude: longitude,
+    imageUrl: imageUrl??this.imageUrl,
+    weatherData: weatherData ?? this.weatherData,
+    searchedAt: searchedAt
+    );
+  }
+
+}
 

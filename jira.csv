@@ -1,0 +1,27 @@
+1,,Epic,Core AI Infrastructure,Build the core architecture for AI skill mapping  
+2,1,Story,Skill Data Acquisition Layer,Aggregate skill and behavioural data from external sources  
+3,2,Task,Design data ingestion pipeline schema (FastAPI + PostgreSQL),Implement ingestion microservice  
+4,2,Task,Implement OAuth-based connectors for LinkedIn & GitHub APIs,Build connectors to import user data  
+5,,Epic,Predictive Intelligence Engine,AI forecasting engine for skill trends  
+6,5,Story,Forecasting Model Development,Develop hybrid LSTM/Prophet model for skill trend prediction  
+7,6,Task,Train Prophet/LSTM model for skill trend forecasting,Train and validate predictive model  
+8,,Epic,Adaptive Learning Orchestrator,Personalised learning path generator  
+9,8,Story,Learning Path Generator,Build recommendation engine (collaborative filtering + skill-gap analysis)  
+10,9,Task,Build recommendation engine (collaborative filtering + skill gap analysis),Develop and test algorithm  
+11,8,Story,Gamification Engine,Design user engagement and token reward system  
+12,11,Task,Design tokenomics model (XP, badges, ERC-1155 rules),Construct gamified reward structure  
+13,,Epic,Frontend Experience Layer,User interfaces for dashboards  
+14,13,Story,Individual Dashboard,Create dashboards with skill visualisations  
+15,14,Task,Build Skill Growth Rings visualization (D3.js),Implement visualisation for skill tracking  
+16,,Epic,Blockchain Credential Layer,Tokenised skill verification system  
+17,16,Story,Smart Contract Development,Develop ERC-1155-based token contract  
+18,17,Task,Write ERC-1155 contract for tokenised skills,Develop and test smart contract  
+19,,Epic,Cloud Deployment & Security,Ensure secure and scalable cloud architecture  
+20,19,Story,Infrastructure Setup,Configure AWS, RDS, CI/CD pipeline for production  
+21,20,Task,Configure AWS EC2, RDS, CI/CD pipeline,Automate deployment and scaling of microservices  
+22,,Epic,Partnership & Sustainability Layer,Build B2B and educational partnerships  
+23,22,Story,University & Enterprise Integrations,Integrate platform with academic institutions and enterprises  
+24,23,Task,Build API integration with academic and enterprise partners,Develop partnership API endpoints  
+25,,Epic,Community & Continuous Feedback,Build continuous learning community  
+26,25,Story,Feedback Loop System,Build in-app feedback and feature-ranking system  
+27,26,Task,Build in-app feedback and feature ranking system,Implement user feedback mechanism  
