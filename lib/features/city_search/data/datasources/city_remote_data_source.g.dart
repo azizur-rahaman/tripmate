@@ -58,14 +58,7 @@ class _GeoDbApi implements GeoDbApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = _result.data!;
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    final httpResponse = HttpResponse(_value, _result);
+    final httpResponse = HttpResponse(_result.data!, _result);
     return httpResponse;
   }
 
@@ -150,14 +143,7 @@ class _WeatherApi implements WeatherApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = _result.data!;
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    final httpResponse = HttpResponse(_value, _result);
+    final httpResponse = HttpResponse(_result.data!, _result);
     return httpResponse;
   }
 
@@ -240,14 +226,7 @@ class _UnsplashApi implements UnsplashApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = _result.data!;
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    final httpResponse = HttpResponse(_value, _result);
+    final httpResponse = HttpResponse(_result.data!, _result);
     return httpResponse;
   }
 

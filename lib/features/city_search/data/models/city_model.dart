@@ -23,6 +23,7 @@ class CityModel {
   final String? imageUrl;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @Ignore()
   final WeatherModel? weatherData;
 
   @Index()
@@ -36,10 +37,10 @@ class CityModel {
     required this.population,
     required this.latitude,
     required this.longitude,
+    required this.searchedAt,
     this.imageUrl,
     this.weatherData,
-    DateTime? searchedAt,
-  }) : searchedAt = searchedAt ?? DateTime.now();
+  });
 
 
   factory CityModel.fromJson(Map<String, dynamic> json) => _$CityModelFromJson(json);
@@ -53,11 +54,19 @@ class CityModel {
   }
 
   factory CityModel.fromEntity(City city) {
-    return CityModel(cityId: city.id, name: city.name, country: city.country, countryCode: city.countryCode, population: city.population, latitude: city.latitude, longitude: city.longitude, 
-    imageUrl:  city.imageUrl,
-    weatherData: city.weather != null?
-                  WeatherModel.fromEntity(city.weather!)
-                  : null
+    return CityModel(
+      cityId: city.id, 
+      name: city.name, 
+      country: city.country, 
+      countryCode: city.countryCode, 
+      population: city.population, 
+      latitude: city.latitude, 
+      longitude: city.longitude, 
+      searchedAt: DateTime.now(),
+      imageUrl:  city.imageUrl,
+      weatherData: city.weather != null?
+                    WeatherModel.fromEntity(city.weather!)
+                    : null
     );
   }
 
@@ -65,10 +74,17 @@ class CityModel {
     String? imageUrl,
     WeatherModel? weatherData
   }){
-    return CityModel(cityId: cityId, name: name, country: country, countryCode: countryCode, population: population, latitude: latitude, longitude: longitude,
-    imageUrl: imageUrl??this.imageUrl,
-    weatherData: weatherData ?? this.weatherData,
-    searchedAt: searchedAt
+    return CityModel(
+      cityId: cityId, 
+      name: name, 
+      country: country, 
+      countryCode: countryCode, 
+      population: population, 
+      latitude: latitude, 
+      longitude: longitude,
+      searchedAt: DateTime.now(),
+      imageUrl: imageUrl??this.imageUrl,
+      weatherData: weatherData ?? this.weatherData,
     );
   }
 
