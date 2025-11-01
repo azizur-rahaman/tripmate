@@ -18,3 +18,4 @@ class SearchCitiesEvent extends CitySearchEvent {
 
 class LoadSearchHistoryEvent extends CitySearchEvent {}
 class ClearSearchHistoryEvent extends CitySearchEvent {}
+
