@@ -11,13 +11,12 @@ part 'city_model.g.dart';
 class CityModel {
   Id isarId = Isar.autoIncrement;
 
-  @JsonKey(name:'id')
+  @JsonKey(name:'place_id')
   final int cityId;
 
   final String name;
   final String country;
   final String countryCode;
-  final int population;
   final double latitude;
   final double longitude;
   final String? imageUrl;
@@ -34,7 +33,6 @@ class CityModel {
     required this.name,
     required this.country,
     required this.countryCode,
-    required this.population,
     required this.latitude,
     required this.longitude,
     required this.searchedAt,
@@ -47,9 +45,15 @@ class CityModel {
   Map<String,dynamic> toJson() => _$CityModelToJson(this);
 
   City toEntity() {
-    return City(id: cityId, name: name, country: country, countryCode: countryCode, population: population, latitude: latitude, longitude: longitude,
-    imageUrl: imageUrl,
-    weather: weatherData?.toEntity(),
+    return City(
+      id: cityId, 
+      name: name, 
+      country: country, 
+      countryCode: countryCode, 
+      latitude: latitude, 
+      longitude: longitude,
+      imageUrl: imageUrl,
+      weather: weatherData?.toEntity(),
     );
   }
 
@@ -59,7 +63,6 @@ class CityModel {
       name: city.name, 
       country: city.country, 
       countryCode: city.countryCode, 
-      population: city.population, 
       latitude: city.latitude, 
       longitude: city.longitude, 
       searchedAt: DateTime.now(),
@@ -79,7 +82,6 @@ class CityModel {
       name: name, 
       country: country, 
       countryCode: countryCode, 
-      population: population, 
       latitude: latitude, 
       longitude: longitude,
       searchedAt: DateTime.now(),

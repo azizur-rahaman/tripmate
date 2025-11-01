@@ -8,13 +8,13 @@ part of 'city_remote_data_source.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _GeoDbApi implements GeoDbApi {
-  _GeoDbApi(
+class _GeoapifyApi implements GeoapifyApi {
+  _GeoapifyApi(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'https://wft-geo-db.p.rapidapi.com';
+    baseUrl ??= 'https://api.geoapify.com/v1';
   }
 
   final Dio _dio;
@@ -24,31 +24,29 @@ class _GeoDbApi implements GeoDbApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> searchCities(
-    String namePrefix,
+  Future<dynamic> searchCities(
+    String text,
+    String type,
     int limit,
     String apiKey,
-    String host,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'namePrefix': namePrefix,
+      r'text': text,
+      r'type': type,
       r'limit': limit,
+      r'apiKey': apiKey,
     };
-    final _headers = <String, dynamic>{
-      r'X-RapidAPI-Key': apiKey,
-      r'X-RapidAPI-Host': host,
-    };
-    _headers.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/v1/geo/cities',
+          '/geocode/autocomplete',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -57,9 +55,9 @@ class _GeoDbApi implements GeoDbApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    final httpResponse = HttpResponse(_result.data!, _result);
-    return httpResponse;
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
@@ -111,7 +109,7 @@ class _WeatherApi implements WeatherApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> getWeather(
+  Future<dynamic> getWeather(
     double lat,
     double lon,
     String apiKey,
@@ -126,7 +124,7 @@ class _WeatherApi implements WeatherApi {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -142,9 +140,9 @@ class _WeatherApi implements WeatherApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    final httpResponse = HttpResponse(_result.data!, _result);
-    return httpResponse;
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
@@ -196,7 +194,7 @@ class _UnsplashApi implements UnsplashApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> searchPhotos(
+  Future<dynamic> searchPhotos(
     String query,
     String client_id,
     int perPage,
@@ -209,7 +207,7 @@ class _UnsplashApi implements UnsplashApi {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -225,9 +223,9 @@ class _UnsplashApi implements UnsplashApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    final httpResponse = HttpResponse(_result.data!, _result);
-    return httpResponse;
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

@@ -91,14 +91,6 @@ class CityCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Pop: ${_formatPopulation(city.population)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[500],
-                            ),
-                          ),
                         ],
                       ),
                       
@@ -155,14 +147,5 @@ class CityCard extends StatelessWidget {
         color: Colors.grey[400],
       ),
     );
-  }
-
-  String _formatPopulation(int population) {
-    if (population >= 1000000) {
-      return '${(population / 1000000).toStringAsFixed(1)}M';
-    } else if (population >= 1000) {
-      return '${(population / 1000).toStringAsFixed(1)}K';
-    }
-    return population.toString();
   }
 }

@@ -7,7 +7,6 @@ class City extends Equatable{
   final String name;
   final String country;
   final String countryCode;
-  final int population;
   final double latitude;
   final double longitude;
   final String? imageUrl;
@@ -18,7 +17,6 @@ class City extends Equatable{
     required this.name,
     required this.country,
     required this.countryCode,
-    required this.population,
     required this.latitude,
     required this.longitude,
     this.imageUrl,
@@ -27,6 +25,6 @@ class City extends Equatable{
 
   @override
   List<Object?> get props => [
-    id,name, country, countryCode, population, latitude, longitude, imageUrl, weather
+    id, name, country, countryCode, latitude, longitude, imageUrl, weather
   ];
 }

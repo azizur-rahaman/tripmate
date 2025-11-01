@@ -46,7 +46,7 @@ Future<void> init() async {
   // Data Sources
   sl.registerLazySingleton<CityRemoteDataSource>(
     () => CityRemoteDataSourceImpl(
-      geoDbApi: sl(),
+      geoapifyApi: sl(),
       weatherApi: sl(),
       unsplashApi: sl(),
     ),
@@ -82,7 +82,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => dio);
 
   // APIs
-  sl.registerLazySingleton(() => GeoDbApi(sl()));
+  sl.registerLazySingleton(() => GeoapifyApi(sl()));
   sl.registerLazySingleton(() => WeatherApi(sl()));
   sl.registerLazySingleton(() => UnsplashApi(sl()));
 

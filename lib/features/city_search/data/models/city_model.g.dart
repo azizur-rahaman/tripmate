@@ -52,13 +52,8 @@ const CityModelSchema = CollectionSchema(
       name: r'name',
       type: IsarType.string,
     ),
-    r'population': PropertySchema(
-      id: 7,
-      name: r'population',
-      type: IsarType.long,
-    ),
     r'searchedAt': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'searchedAt',
       type: IsarType.dateTime,
     )
@@ -122,8 +117,7 @@ void _cityModelSerialize(
   writer.writeDouble(offsets[4], object.latitude);
   writer.writeDouble(offsets[5], object.longitude);
   writer.writeString(offsets[6], object.name);
-  writer.writeLong(offsets[7], object.population);
-  writer.writeDateTime(offsets[8], object.searchedAt);
+  writer.writeDateTime(offsets[7], object.searchedAt);
 }
 
 CityModel _cityModelDeserialize(
@@ -140,8 +134,7 @@ CityModel _cityModelDeserialize(
     latitude: reader.readDouble(offsets[4]),
     longitude: reader.readDouble(offsets[5]),
     name: reader.readString(offsets[6]),
-    population: reader.readLong(offsets[7]),
-    searchedAt: reader.readDateTime(offsets[8]),
+    searchedAt: reader.readDateTime(offsets[7]),
   );
   object.isarId = id;
   return object;
@@ -169,8 +162,6 @@ P _cityModelDeserializeProp<P>(
     case 6:
       return (reader.readString(offset)) as P;
     case 7:
-      return (reader.readLong(offset)) as P;
-    case 8:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1144,60 +1135,6 @@ extension CityModelQueryFilter
     });
   }
 
-  QueryBuilder<CityModel, CityModel, QAfterFilterCondition> populationEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'population',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CityModel, CityModel, QAfterFilterCondition>
-      populationGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'population',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CityModel, CityModel, QAfterFilterCondition> populationLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'population',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<CityModel, CityModel, QAfterFilterCondition> populationBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'population',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<CityModel, CityModel, QAfterFilterCondition> searchedAtEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -1344,18 +1281,6 @@ extension CityModelQuerySortBy on QueryBuilder<CityModel, CityModel, QSortBy> {
     });
   }
 
-  QueryBuilder<CityModel, CityModel, QAfterSortBy> sortByPopulation() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'population', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CityModel, CityModel, QAfterSortBy> sortByPopulationDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'population', Sort.desc);
-    });
-  }
-
   QueryBuilder<CityModel, CityModel, QAfterSortBy> sortBySearchedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'searchedAt', Sort.asc);
@@ -1467,18 +1392,6 @@ extension CityModelQuerySortThenBy
     });
   }
 
-  QueryBuilder<CityModel, CityModel, QAfterSortBy> thenByPopulation() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'population', Sort.asc);
-    });
-  }
-
-  QueryBuilder<CityModel, CityModel, QAfterSortBy> thenByPopulationDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'population', Sort.desc);
-    });
-  }
-
   QueryBuilder<CityModel, CityModel, QAfterSortBy> thenBySearchedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'searchedAt', Sort.asc);
@@ -1540,12 +1453,6 @@ extension CityModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<CityModel, CityModel, QDistinct> distinctByPopulation() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'population');
-    });
-  }
-
   QueryBuilder<CityModel, CityModel, QDistinct> distinctBySearchedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'searchedAt');
@@ -1603,12 +1510,6 @@ extension CityModelQueryProperty
     });
   }
 
-  QueryBuilder<CityModel, int, QQueryOperations> populationProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'population');
-    });
-  }
-
   QueryBuilder<CityModel, DateTime, QQueryOperations> searchedAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'searchedAt');
@@ -1621,11 +1522,10 @@ extension CityModelQueryProperty
 // **************************************************************************
 
 CityModel _$CityModelFromJson(Map<String, dynamic> json) => CityModel(
-      cityId: (json['id'] as num).toInt(),
+      cityId: (json['place_id'] as num).toInt(),
       name: json['name'] as String,
       country: json['country'] as String,
       countryCode: json['countryCode'] as String,
-      population: (json['population'] as num).toInt(),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       searchedAt: DateTime.parse(json['searchedAt'] as String),
@@ -1634,11 +1534,10 @@ CityModel _$CityModelFromJson(Map<String, dynamic> json) => CityModel(
 
 Map<String, dynamic> _$CityModelToJson(CityModel instance) => <String, dynamic>{
       'isarId': instance.isarId,
-      'id': instance.cityId,
+      'place_id': instance.cityId,
       'name': instance.name,
       'country': instance.country,
       'countryCode': instance.countryCode,
-      'population': instance.population,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'imageUrl': instance.imageUrl,

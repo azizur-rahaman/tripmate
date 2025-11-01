@@ -14,17 +14,16 @@ abstract class CityRemoteDataSource {
 }
 
 
-@RestApi(baseUrl: ApiConstants.geoDbBaseUrl)
-abstract class GeoDbApi {
-  factory GeoDbApi(Dio dio, {String baseUrl}) = _GeoDbApi;
-
+@RestApi(baseUrl: ApiConstants.geoapifyBaseUrl)
+abstract class GeoapifyApi {
+  factory GeoapifyApi(Dio dio, {String baseUrl}) = _GeoapifyApi;
 
   @GET(ApiConstants.getCities)
-  Future<HttpResponse<Map<String, dynamic>>> searchCities(
-    @Query('namePrefix') String namePrefix,
+  Future<dynamic> searchCities(
+    @Query('text') String text,
+    @Query('type') String type,
     @Query('limit') int limit,
-    @Header('X-RapidAPI-Key') String apiKey,
-    @Header('X-RapidAPI-Host') String host
+    @Query('apiKey') String apiKey
   );
 }
 
@@ -33,7 +32,7 @@ abstract class WeatherApi {
   factory WeatherApi(Dio dio, {String baseUrl}) = _WeatherApi;
 
   @GET(ApiConstants.getWeather)
-  Future<HttpResponse<Map<String,dynamic>>> getWeather(
+  Future<dynamic> getWeather(
     @Query('lat') double lat,
     @Query('lon') double lon,
     @Query('appid') String apiKey,
@@ -47,7 +46,7 @@ abstract class UnsplashApi {
   factory UnsplashApi(Dio dio, {String baseUrl}) = _UnsplashApi;
 
   @GET(ApiConstants.searchPhotos)
-  Future<HttpResponse<Map<String, dynamic>>> searchPhotos(
+  Future<dynamic> searchPhotos(
     @Query('query') String query,
     @Query('client_id') String client_id,
     @Query('per_page') int perPage,
@@ -56,12 +55,12 @@ abstract class UnsplashApi {
 }
 
 class CityRemoteDataSourceImpl implements CityRemoteDataSource {
-  final GeoDbApi geoDbApi;
+  final GeoapifyApi geoapifyApi;
   final WeatherApi weatherApi;
   final UnsplashApi unsplashApi;
 
   CityRemoteDataSourceImpl({
-    required this.geoDbApi,
+    required this.geoapifyApi,
     required this.weatherApi,
     required this.unsplashApi
   });
@@ -70,16 +69,27 @@ class CityRemoteDataSourceImpl implements CityRemoteDataSource {
   @override
   Future<List<CityModel>> searchCities(String query) async {
     try{
-      final response = await geoDbApi.searchCities(
-        query, 10, ApiConstants.geoDbApiKey, ApiConstants.geoDbHost);
+      final response = await geoapifyApi.searchCities(
+        query, 'city', 10, ApiConstants.geoapifyApiKey);
 
-      if(response.response.statusCode == 200){
-        final data = response.data['data'] as List;
-        final cities = data.map((json) => CityModel.fromJson(json)).toList();
-        return cities;
-      }else{
-        throw ServerException('Failed to Fetch cities');
-      }
+      final features = response['features'] as List;
+      final cities = features.map((feature) {
+        final properties = feature['properties'] as Map<String, dynamic>;
+        final geometry = feature['geometry'] as Map<String, dynamic>;
+        final coordinates = geometry['coordinates'] as List;
+        
+        // Extract city data from Geoapify GeoJSON format
+        return CityModel(
+          cityId: properties['place_id']?.hashCode ?? 0,
+          name: properties['city'] ?? properties['name'] ?? '',
+          country: properties['country'] ?? '',
+          countryCode: properties['country_code']?.toString().toUpperCase() ?? '',
+          latitude: coordinates[1] as double,
+          longitude: coordinates[0] as double,
+          searchedAt: DateTime.now(),
+        );
+      }).toList();
+      return cities;
     } on DioException catch (e) {
       throw ServerException(e.message ?? 'Network error');
     }
@@ -91,11 +101,9 @@ class CityRemoteDataSourceImpl implements CityRemoteDataSource {
     try{
       final response = await unsplashApi.searchPhotos('$cityName city', ApiConstants.unsplashAccessKey, 1);
 
-      if(response.response.statusCode == 200){
-        final result = response.data['results'] as List;
-        if(result.isNotEmpty){
-          return result[0]['urls']['regular'];
-        }
+      final result = response['results'] as List;
+      if(result.isNotEmpty){
+        return result[0]['urls']['regular'];
       }
       return null;
     } catch (e) {
@@ -109,18 +117,13 @@ class CityRemoteDataSourceImpl implements CityRemoteDataSource {
     try{
       final response = await weatherApi.getWeather(lat, lon, ApiConstants.weatherApiKey, 'metric');
 
-      if(response.response.statusCode == 200){
-        final data = response.data;
-        return WeatherModel(
-          temperature: (data['main']['temp'] as num).toDouble(), 
-          description: data['weather'][0]['description'],
-          icon: data['weather'][0]['icon'],
-          humidity: data['main']['humidity'], 
-          feelsLike: (data['main']['feels_like'] as num).toDouble()
-        );
-      }else {
-        throw ServerException('Failed to fetch weather');
-      }
+      return WeatherModel(
+        temperature: (response['main']['temp'] as num).toDouble(), 
+        description: response['weather'][0]['description'],
+        icon: response['weather'][0]['icon'],
+        humidity: response['main']['humidity'], 
+        feelsLike: (response['main']['feels_like'] as num).toDouble()
+      );
     } on DioException catch(e) {
       throw ServerException(e.message ?? 'Weather fetch failed!');
     }
