@@ -1,12 +1,13 @@
-mport 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../injection_container.dart';
-import '../bloc/city_search_bloc.dart';
-import '../bloc/city_search_event.dart';
-import '../bloc/city_search_state.dart';
-import '../widgets/city_card.dart';
-import '../widgets/recent_searches_section.dart';
-import '../widgets/search_bar_widget.dart';
+import 'package:tripmate/features/city_search/presentation/bloc/city_search_event.dart';
+import 'package:tripmate/features/city_search/presentation/bloc/city_search_state.dart';
+import 'package:tripmate/features/city_search/presentation/city_search_bloc.dart';
+import 'package:tripmate/features/city_search/presentation/widgets/city_card.dart';
+import 'package:tripmate/features/city_search/presentation/widgets/recent_searches_section.dart';
+import 'package:tripmate/features/city_search/presentation/widgets/search_bar_widget.dart';
+import 'package:tripmate/injection_container.dart';
 
 class CitySearchPage extends StatelessWidget {
   const CitySearchPage({Key? key}) : super(key: key);
